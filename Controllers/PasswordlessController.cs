@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Passwordless.Net;
+using PasswordlessDemo.Models;
 
 namespace PasswordlessDemo.Controllers
 {
@@ -25,13 +26,15 @@ namespace PasswordlessDemo.Controllers
 			_passwordlessClient = passwordlessClient;
 		}
 
-		[HttpGet("signup")]
-		public async Task<IActionResult> GetRegisterToken(string alias)
+		[HttpPost]
+		[Route("signup")]
+		public async Task<IActionResult> GetRegisterToken(UserModel alias)
 		{
 			var guid = Guid.NewGuid().ToString();
-			var payload = new RegisterOptions(guid, alias)
+			
+			var payload = new RegisterOptions(guid, alias.Username)
 			{
-				Aliases = new HashSet<string> { alias }
+				Aliases = new HashSet<string> { alias.Username }
 			};
 			try
 			{
